@@ -13,7 +13,7 @@ func (a App) Run() {
 	m := martini.Classic()
 	m.Get("/", func() string {
    	return "Hello world234778!"
-})
+	})
 
-http.ListenAndServe("goblog.dev:8080", m)
+	http.ListenAndServe("goblog.dev:8080", m)
 }
