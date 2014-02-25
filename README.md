@@ -1,0 +1,4 @@
+goblog
+======
+
+Go Lang Blog
