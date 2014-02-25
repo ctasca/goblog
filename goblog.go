@@ -1,14 +1,10 @@
 package main
 
 import (
-   "net/http"
-   "github.com/codegangsta/martini"
+   "github.com/ctasca/goblog/app"
 )
 
 func main() {
-  m := martini.Classic()
-  m.Get("/", func() string {
-    return "Hello world!"
-  })
-  http.ListenAndServe("goblog.dev:8080", m)
+  a := new(app.App)
+  a.Run()
 }
