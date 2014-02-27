@@ -34,7 +34,7 @@ func TestHandler(t *testing.T) {
 }
 
 func TestVersion(t *testing.T) {
-	Convey("Given a new blog installer with version 0.0.0.1 is created", t, func() {
+	Convey("Given a new blog installer with version 0.0.0.0 is created", t, func() {
 			i := setUp()
 			Convey("Then invoking Version should return the expected version number", func() {
 					version := i.Version()
