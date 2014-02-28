@@ -25,7 +25,7 @@ func TestItCollectRoutes(t *testing.T) {
 
 func TestNewApp (t *testing.T) {
 	Convey("Given NewApp message is sent", t, func() {
-			installer := NewBlogInstaller("0.0.0.1", "/Users/ctasca/mygo/src/github.com/ctasca/goblog")
+			installer := NewBlogInstaller("0.0.0.1", "/Users/ctasca/mygo/src/github.com/ctasca/goblog", "/_os/etc")
 			a := NewApp(installer);
 			Convey("The created app must be of type App", func() {
 					So(a, ShouldHaveSameTypeAs, &App{})

@@ -10,12 +10,14 @@ import (
 type BlogInstaller struct {
 	version string
 	basedir string
+	etcdir  string
 }
 
-func NewBlogInstaller(version string, basedir string) *BlogInstaller {
+func NewBlogInstaller(version string, basedir string, etcdir string) *BlogInstaller {
 	installer := new(BlogInstaller)
 	installer.version = version
 	installer.basedir = basedir
+	installer.etcdir = etcdir
 	return installer
 }
 
@@ -33,8 +35,12 @@ func (installer *BlogInstaller) Basedir() string {
 	return installer.basedir
 }
 
+func (installer *BlogInstaller) Etcdir() string {
+	return installer.etcdir
+}
+
 func (installer *BlogInstaller) Installed() bool {
-	_, err := os.Open(installer.Basedir() + "/_os/etc/config.json");
+	_, err := os.Open(installer.Basedir() + installer.Etcdir() + "/config.json");
 
 	if err != nil {
 		return false
@@ -70,6 +76,6 @@ func (installer *BlogInstaller) copyTempJsonConfigFile() error {
 		panic("Could not read temporary config.json file " + temperr.Error())
 	}
 
-	return ioutil.WriteFile(installer.Basedir() + "/_os/etc/config.json", tconfig, 0644)
+	return ioutil.WriteFile(installer.Basedir() + installer.Etcdir()  + "/config.json", tconfig, 0644)
 }
 

@@ -9,6 +9,7 @@ import (
 
 type Installer interface {
 	Basedir () string
+	Etcdir () string
 	Handler () interface {}
 	Version ()  string
 	Installed () bool
@@ -22,6 +23,7 @@ type App struct {
 	domain    string
 	port      string
 	basedir   string
+	etcdir   string
 	version   string
 }
 // Creates a new blog application
@@ -29,7 +31,8 @@ func NewApp(installer Installer) *App {
 	application              := new(App)
 	application.installer    = installer
 	application.basedir      = application.installer.Basedir()
-	main, err                := ioutil.ReadFile(application.installer.Basedir() + "/_os/etc/appconfig.json");
+	application.etcdir       = application.installer.Etcdir()
+	main, err                := ioutil.ReadFile(application.coreJsonPath());
 	var dat map[string]string
 
 	if err != nil {
@@ -41,6 +44,8 @@ func NewApp(installer Installer) *App {
 	return application
 }
 
+// Invoked in main, runs the application
+// If the application is not installed, serves installer handler
 func (application *App) Run() (int, error) {
 	m := martini.Classic()
 	if !application.installer.Installed() {
@@ -56,4 +61,8 @@ func (application *App) initialize(main []byte, name string, domain string, port
 	application.name      = name
 	application.domain    = domain
 	application.port      = port
+}
+
+func (application *App) coreJsonPath() string {
+	return application.installer.Basedir() + application.etcdir + "/core.json"
 }

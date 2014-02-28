@@ -8,7 +8,7 @@ import (
 )
 
 func setUp() *BlogInstaller {
-	return NewBlogInstaller("0.0.0.0", "/Users/ctasca/mygo/src/github.com/ctasca/goblog")
+	return NewBlogInstaller("0.0.0.0", "/Users/ctasca/mygo/src/github.com/ctasca/goblog", "/_os/etc")
 }
 
 func TestNewBlogInstaller(t *testing.T) {
@@ -75,11 +75,11 @@ func TestInstall(t *testing.T) {
 					Convey("Then there must be config.json file in /tmp/ directory", func() {
 							_, err := os.Open("/tmp/config.json");
 							So(err, ShouldEqual, nil)
-							Convey("And the content of /tmp/config.json is the same as [basedir]/etc/config.json", func() {
+							Convey("And the content of /tmp/config.json is the same as [basedir]/_os/etc/config.json", func() {
 									tconfig, _ := ioutil.ReadFile("/tmp/config.json")
 									configerr  := ioutil.WriteFile(i.Basedir() + "/_os/etc/config.json", tconfig, 0644)
 									So(configerr, ShouldEqual, nil)
-											Convey("And should return true", func() {
+											Convey("And should return no error", func() {
 													So(installed, ShouldEqual, nil)
 												})
 								})

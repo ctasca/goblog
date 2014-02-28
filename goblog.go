@@ -14,7 +14,7 @@ func main() {
 		panic("Cannot get OS working directory")
 	}
 
-	installer := app.NewBlogInstaller("0.0.0.1", wd);
+	installer := app.NewBlogInstaller("0.0.0.1", wd, "/_os/etc");
 	goblog := app.NewApp(installer)
 
 	status, error := goblog.Run()
