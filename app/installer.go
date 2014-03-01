@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
+	"html/template"
 )
 
 type BlogInstaller struct {
@@ -19,12 +21,6 @@ func NewBlogInstaller(version string, basedir string, etcdir string) *BlogInstal
 	installer.basedir = basedir
 	installer.etcdir = etcdir
 	return installer
-}
-
-func (installer *BlogInstaller) Handler() interface{} {
-	return func() string {
-		return "Hello from Installer Handler!"
-	}
 }
 
 func (installer *BlogInstaller) Version() string {
@@ -48,6 +44,17 @@ func (installer *BlogInstaller) Installed() bool {
 
 	return true
 }
+func (installer *BlogInstaller) HttpHandlers() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			p := NewPage("Goblog Installer")
+			t, _ := template.ParseFiles("installer/template/page.html", "installer/template/head.html", "installer/template/form.html")
+			t.Execute(w, p)
+		})
+
+	http.HandleFunc("/install", func(w http.ResponseWriter, r *http.Request) {
+
+		})
+}
 
 func (installer *BlogInstaller) Install(dat map[string]interface{}) error {
 	err := installer.writeTempJsonConfigFile(dat)
@@ -64,7 +71,7 @@ func (installer *BlogInstaller) writeTempJsonConfigFile(dat map[string]interface
 	i, err := f.Write(d2)
 	f.Sync()
 	if err != nil {
-		panic("Could not create /tmp/config.json: " + strconv.Itoa(i) + err.Error() )
+		panic("Could not create /tmp/config.json: " + strconv.Itoa(i) + err.Error())
 	}
 	return err
 }
@@ -76,6 +83,5 @@ func (installer *BlogInstaller) copyTempJsonConfigFile() error {
 		panic("Could not read temporary config.json file " + temperr.Error())
 	}
 
-	return ioutil.WriteFile(installer.Basedir() + installer.Etcdir()  + "/config.json", tconfig, 0644)
+	return ioutil.WriteFile(installer.Basedir()+installer.Etcdir()+"/config.json", tconfig, 0644)
 }
-

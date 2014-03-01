@@ -7,35 +7,22 @@ import (
 	"io/ioutil"
 )
 
-func setUp() *BlogInstaller {
+func setUpInstaller() *BlogInstaller {
 	return NewBlogInstaller("0.0.0.0", "/Users/ctasca/mygo/src/github.com/ctasca/goblog", "/_os/etc")
 }
 
 func TestNewBlogInstaller(t *testing.T) {
 	Convey("Given NewBlogInstaller message is sent", t, func() {
-			i := setUp()
+			i := setUpInstaller()
 			Convey("Then the constucted object must be of type BlogInstaller", func() {
 					So(i, ShouldHaveSameTypeAs, &BlogInstaller{})
 				})
 		})
 }
 
-func TestHandler(t *testing.T) {
-	Convey("Given a new blog installer is created", t, func() {
-			i := setUp()
-			Convey("Then invoking Handler should return the installer handler 'func() string'", func() {
-					handler := i.Handler()
-					handlerMock := func() string {
-						return "Hello from Installer Handler!"
-					}
-					So(handler, ShouldHaveSameTypeAs, handlerMock)
-				})
-		})
-}
-
 func TestVersion(t *testing.T) {
 	Convey("Given a new blog installer with version 0.0.0.0 is created", t, func() {
-			i := setUp()
+			i := setUpInstaller()
 			Convey("Then invoking Version should return the expected version number", func() {
 					version := i.Version()
 					So(version, ShouldEqual, "0.0.0.0")
@@ -46,7 +33,7 @@ func TestVersion(t *testing.T) {
 
 func TestInstalled(t *testing.T) {
 	Convey("Given a new blog installer is created", t, func() {
-			i := setUp()
+			i := setUpInstaller()
 			os.Remove(i.Basedir() + "/_os/etc/config.json")
 			Convey("When the message Installed is sent", func() {
 					installed := i.Installed()
@@ -59,7 +46,7 @@ func TestInstalled(t *testing.T) {
 
 func TestInstall(t *testing.T) {
 	Convey("Given a new blog installer is created", t, func() {
-			i := setUp()
+			i := setUpInstaller()
 
 			Convey("When the message Install is sent", func() {
 					post := make(map[string]interface{})
